@@ -4,9 +4,77 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HOTPIC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 720px;
+      margin: 24px auto;
+      padding: 0 16px;
+      background: #111;
+      color: #fff;
+    }
+    .upload-box {
+      border: 1px solid #333;
+      padding: 16px;
+      border-radius: 10px;
+      background: #1b1b1b;
+      margin-bottom: 24px;
+    }
+    button {
+      margin-top: 12px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      background: #2ea043;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    #gallery img, #gallery video {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 12px;
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <h1>HOTPIC</h1>
   <p>គេហទំព័រចែករំលែករូបភាព និងវីដេអូ។</p>
+
+  <form id="uploadForm" class="upload-box">
+    <label for="mediaInput">ជ្រើសរើសរូបភាព ឬវីដេអូ៖</label><br /><br />
+    <input id="mediaInput" type="file" accept="image/*,video/*" required /><br />
+    <button type="submit">បង្ហោះ (Upload)</button>
+  </form>
+
+  <h2>មាតិកាដែលបានជ្រើសរើស</h2>
+  <div id="gallery"></div>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+    const input = document.getElementById("mediaInput");
+    const gallery = document.getElementById("gallery");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const file = input.files[0];
+      if (!file) return;
+
+      const url = URL.createObjectURL(file);
+      if (file.type.startsWith("video/")) {
+        const video = document.createElement("video");
+        video.src = url;
+        video.controls = true;
+        gallery.prepend(video);
+      } else {
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = file.name;
+        gallery.prepend(img);
+      }
+      form.reset();
+    });
+  </script>
 </body>
 </html>
